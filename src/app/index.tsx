@@ -1,30 +1,42 @@
 
-import { View, Text, Pressable, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import { Link } from 'expo-router';
+import { useTasks } from '../context/TasksContext';
 
 export default function HomeScreen() {
+  const { tasks } = useTasks();
+
+  const completed = tasks.filter(
+    (task) => task.completed
+  ).length;
+
+  const pending = tasks.length - completed;
+
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Daily Tasks</Text>
+      <Text style={styles.heading}>Daily Tasks</Text>
 
       <Text style={styles.subtitle}>
-        Organize your day, one task at a time.
+        Your daily progress at a glance.
       </Text>
 
-      <Link href="/tasks" asChild>
-        <Pressable style={styles.button}>
-          <Text style={styles.buttonText}>
-            View My Tasks
-          </Text>
-        </Pressable>
-      </Link>
+      <View style={styles.card}>
+        <Text style={styles.number}>{tasks.length}</Text>
+        <Text>Total Tasks</Text>
+      </View>
 
-      <Link href="/settings" asChild>
-        <Pressable style={styles.secondaryButton}>
-          <Text style={styles.secondaryButtonText}>
-            Open Settings
-          </Text>
-        </Pressable>
+      <View style={styles.card}>
+        <Text style={styles.number}>{completed}</Text>
+        <Text>Completed Tasks</Text>
+      </View>
+
+      <View style={styles.card}>
+        <Text style={styles.number}>{pending}</Text>
+        <Text>Pending Tasks</Text>
+      </View>
+
+      <Link href="/tasks" style={styles.link}>
+        Manage My Tasks
       </Link>
     </View>
   );
@@ -33,44 +45,34 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
     padding: 24,
+    justifyContent: 'center',
   },
-  title: {
-    fontSize: 32,
+  heading: {
+    fontSize: 30,
     fontWeight: 'bold',
     color: '#1E293B',
-    textAlign: 'center',
   },
   subtitle: {
-    fontSize: 16,
     color: '#64748B',
-    textAlign: 'center',
-    marginTop: 12,
-    marginBottom: 32,
+    marginTop: 8,
+    marginBottom: 24,
   },
-  button: {
-    backgroundColor: '#2563EB',
-    padding: 16,
+  card: {
+    backgroundColor: '#FFFFFF',
+    padding: 18,
     borderRadius: 12,
-    alignItems: 'center',
     marginBottom: 12,
   },
-  buttonText: {
-    color: '#FFFFFF',
-    fontSize: 16,
+  number: {
+    fontSize: 28,
     fontWeight: 'bold',
-  },
-  secondaryButton: {
-    borderWidth: 1,
-    borderColor: '#2563EB',
-    padding: 16,
-    borderRadius: 12,
-    alignItems: 'center',
-  },
-  secondaryButtonText: {
     color: '#2563EB',
-    fontSize: 16,
+    marginBottom: 4,
+  },
+  link: {
+    color: '#2563EB',
     fontWeight: 'bold',
+    marginTop: 12,
   },
 });
